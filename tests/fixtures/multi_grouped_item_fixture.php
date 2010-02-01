@@ -1,18 +1,15 @@
 <?php
-/* SVN FILE: $Id$ */
-/* MultiGroupedItem Fixture generated on: 2009-01-31 22:01:27 : 1233441267*/
-
 class MultiGroupedItemFixture extends CakeTestFixture {
 	var $name = 'MultiGroupedItem';
 	var $table = 'multi_grouped_items';
 	var $fields = array(
-			'id' => array('type'=>'integer', 'null' => false, 'default' => NULL, 'length' => 10, 'key' => 'primary'),
-			'name' => array('type'=>'string', 'null' => false, 'default' => NULL),
-			'group_field_1' => array('type'=>'integer', 'null' => true, 'default' => NULL, 'length' => 10),
-			'group_field_2' => array('type'=>'integer', 'null' => true, 'default' => NULL, 'length' => 10),
-			'order' => array('type'=>'integer', 'null' => true, 'default' => NULL, 'length' => 10),
-			'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
-			);
+    'id' => array('type'=>'integer', 'null' => false, 'default' => NULL, 'length' => 10, 'key' => 'primary'),
+    'name' => array('type'=>'string', 'null' => false, 'default' => NULL),
+    'group_field_1' => array('type'=>'integer', 'null' => true, 'default' => NULL, 'length' => 10),
+    'group_field_2' => array('type'=>'integer', 'null' => true, 'default' => NULL, 'length' => 10),
+    'order' => array('type'=>'integer', 'null' => true, 'default' => NULL, 'length' => 10),
+    'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
+  );
   var $records = array(
     array('id' => 1, 'name' => 'Group1 1 Group2 1 Item A', 'group_field_1' => 1, 'group_field_2' => 1, 'order' => 0),
     array('id' => 2, 'name' => 'Group1 1 Group2 1 Item B', 'group_field_1' => 1, 'group_field_2' => 1, 'order' => 1),

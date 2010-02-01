@@ -1,17 +1,14 @@
 <?php
-/* SVN FILE: $Id$ */
-/* GroupedItem Fixture generated on: 2009-01-31 22:01:14 : 1233441254*/
-
 class GroupedItemFixture extends CakeTestFixture {
 	var $name = 'GroupedItem';
 	var $table = 'grouped_items';
 	var $fields = array(
-			'id' => array('type'=>'integer', 'null' => false, 'default' => NULL, 'length' => 10, 'key' => 'primary'),
-			'name' => array('type'=>'string', 'null' => false, 'default' => NULL),
-			'group_field' => array('type'=>'integer', 'null' => true, 'default' => NULL, 'length' => 10),
-			'order' => array('type'=>'integer', 'null' => true, 'default' => NULL, 'length' => 10),
-			'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
-			);
+    'id' => array('type'=>'integer', 'null' => false, 'default' => NULL, 'length' => 10, 'key' => 'primary'),
+    'name' => array('type'=>'string', 'null' => false, 'default' => NULL),
+    'group_field' => array('type'=>'integer', 'null' => true, 'default' => NULL, 'length' => 10),
+    'order' => array('type'=>'integer', 'null' => true, 'default' => NULL, 'length' => 10),
+    'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
+  );
   var $records = array(
     array('id' => 1, 'name' => 'Group 1 Item A', 'group_field' => 1, 'order' => 0),
     array('id' => 2, 'name' => 'Group 1 Item B', 'group_field' => 1, 'order' => 1),
