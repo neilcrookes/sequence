@@ -235,12 +235,12 @@ class SequenceBehavior extends ModelBehavior {
 
       // No action if new and old group and order same
       if ($this->_newOrder[$model->alias] == $this->_oldOrder[$model->alias]
-      && Set::isEqual($this->_newGroups[$model->alias], $this->_oldGroups[$model->alias])) {
+      && $this->_newGroups[$model->alias] == $this->_oldGroups[$model->alias]) {
         return;
       }
 
       // If changing group
-      if ($this->_newGroups[$model->alias] && !Set::isEqual($this->_newGroups[$model->alias], $this->_oldGroups[$model->alias])) {
+      if ($this->_newGroups[$model->alias] && $this->_newGroups[$model->alias] != $this->_oldGroups[$model->alias]) {
 
         // Decrement records in old group with higher order than moved record old order
         $this->_update[$model->alias][] = array(
