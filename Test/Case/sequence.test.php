@@ -3,8 +3,8 @@
 App::import('Behavior', 'Sequence');
 
 class Item extends CakeTestModel {
-	var $name = 'Item';
-	var $actsAs = array('Sequence');
+  var $name = 'Item';
+  var $actsAs = array('Sequence');
 }
 
 class GroupedItem extends CakeTestModel {
@@ -19,20 +19,20 @@ class MultiGroupedItem extends CakeTestModel {
 
 class SequenceBehaviorTestCase extends CakeTestCase {
 
-	var $fixtures = array('item', 'grouped_item', 'multi_grouped_item');
+  var $fixtures = array('item', 'grouped_item', 'multi_grouped_item');
 
-	var $defaults = array(
+  var $defaults = array(
     'order_field' => 'order',
     'group_fields' => false,
-    'start_at' => 0,
+    'start_at' => 0
   );
 
-	function startTest() {
-	}
+  function startTest() {
+  }
 
-	function testSetup() {
+  function testSetup() {
 
-	  $Item = new Item();
+    $Item = new Item();
     $this->assertEqual($Item->Behaviors->Sequence->settings['Item'], $this->defaults);
     $this->assertEqual($Item->Behaviors->Sequence->orderField, $this->defaults['order_field']);
     $this->assertFalse($Item->Behaviors->Sequence->groupFields);
@@ -50,13 +50,13 @@ class SequenceBehaviorTestCase extends CakeTestCase {
     $this->assertEqual($MultiGroupedItem->Behaviors->Sequence->settings['MultiGroupedItem'], array_merge($this->defaults, $MultiGroupedItem->actsAs['Sequence']));
     $this->assertEqual($MultiGroupedItem->Behaviors->Sequence->groupFields, $MultiGroupedItem->actsAs['Sequence']['group_fields']);
 
-	}
+  }
 
-	function testSetSaveUpdateData() {
+  function testSetSaveUpdateData() {
 
-	  /**
-	   * Testing saving a new record (order not specified) sets order to highest + 1
-	   */
+    /**
+     * Testing saving a new record (order not specified) sets order to highest + 1
+     */
     $Item = new Item();
     $data = array(
       'Item' => array(
@@ -79,7 +79,7 @@ class SequenceBehaviorTestCase extends CakeTestCase {
       ),
       'conditions' => array(
         '`Item`.`order` >=' => 3
-      ),
+      )
     );
     $this->assertEqual($Item->Behaviors->Sequence->update, $expected);
 
@@ -96,7 +96,7 @@ class SequenceBehaviorTestCase extends CakeTestCase {
       'conditions' => array(
         array('`Item`.`order` >=' => 1),
         array('`Item`.`order` <' => 3)
-      ),
+      )
     );
     $this->assertEqual($Item->Behaviors->Sequence->update, $expected);
 
@@ -126,7 +126,7 @@ class SequenceBehaviorTestCase extends CakeTestCase {
       ),
       'conditions' => array(
         '`GroupedItem`.`order` >=' => 3
-      ),
+      )
     );
     $this->assertEqual($GroupedItem->Behaviors->Sequence->update, $expected);
 
@@ -144,7 +144,7 @@ class SequenceBehaviorTestCase extends CakeTestCase {
       'conditions' => array(
         array('`GroupedItem`.`order` >=' => 1),
         array('`GroupedItem`.`order` <' => 3)
-      ),
+      )
     );
     $this->assertEqual($GroupedItem->Behaviors->Sequence->update, $expected);
 
@@ -160,14 +160,14 @@ class SequenceBehaviorTestCase extends CakeTestCase {
         '`GroupedItem`.`order`' => '`GroupedItem`.`order` - 1'
       ),
       'conditions' => array(
-        '`GroupedItem`.`order` >=' => 1,
-      ),
+        '`GroupedItem`.`order` >=' => 1
+      )
     );
     $this->assertEqual($GroupedItem->Behaviors->Sequence->update, $expected);
     $expected = array(
       'GroupedItem' => array(
         'group_field' => 2,
-        'order' => 5,
+        'order' => 5
       )
     );
     $this->assertEqual($GroupedItem->data, $expected);
@@ -199,7 +199,7 @@ class SequenceBehaviorTestCase extends CakeTestCase {
       ),
       'conditions' => array(
         '`MultiGroupedItem`.`order` >=' => 3
-      ),
+      )
     );
     $this->assertEqual($MultiGroupedItem->Behaviors->Sequence->update, $expected);
 
@@ -217,7 +217,7 @@ class SequenceBehaviorTestCase extends CakeTestCase {
       'conditions' => array(
         array('`MultiGroupedItem`.`order` >=' => 1),
         array('`MultiGroupedItem`.`order` <' => 3)
-      ),
+      )
     );
     $this->assertEqual($MultiGroupedItem->Behaviors->Sequence->update, $expected);
 
@@ -234,20 +234,20 @@ class SequenceBehaviorTestCase extends CakeTestCase {
         '`MultiGroupedItem`.`order`' => '`MultiGroupedItem`.`order` - 1'
       ),
       'conditions' => array(
-        '`MultiGroupedItem`.`order` >=' => 1,
-      ),
+        '`MultiGroupedItem`.`order` >=' => 1
+      )
     );
     $this->assertEqual($MultiGroupedItem->Behaviors->Sequence->update, $expected);
     $expected = array(
       'MultiGroupedItem' => array(
         'group_field_1' => 2,
         'group_field_2' => 2,
-        'order' => 5,
+        'order' => 5
       )
     );
     $this->assertEqual($MultiGroupedItem->data, $expected);
 
-	}
+  }
 
   function testGetHighestOrder() {
 
@@ -339,7 +339,7 @@ class SequenceBehaviorTestCase extends CakeTestCase {
     $GroupedItem->setOldGroups();
     $expected = array(
       array(
-        $GroupedItem->escapeField($GroupedItem->Behaviors->Sequence->settings['GroupedItem']['group_fields'][0]) => null,
+        $GroupedItem->escapeField($GroupedItem->Behaviors->Sequence->settings['GroupedItem']['group_fields'][0]) => null
       )
     );
     $this->assertEqual($GroupedItem->conditionsForGroups(), $expected);
@@ -348,7 +348,7 @@ class SequenceBehaviorTestCase extends CakeTestCase {
     $GroupedItem->setOldGroups();
     $expected = array(
       array(
-        $GroupedItem->escapeField($GroupedItem->Behaviors->Sequence->settings['GroupedItem']['group_fields'][0]) => 1,
+        $GroupedItem->escapeField($GroupedItem->Behaviors->Sequence->settings['GroupedItem']['group_fields'][0]) => 1
       )
     );
     $this->assertEqual($GroupedItem->conditionsForGroups(), $expected);
@@ -357,10 +357,10 @@ class SequenceBehaviorTestCase extends CakeTestCase {
     $MultiGroupedItem->setOldGroups();
     $expected = array(
       array(
-        $MultiGroupedItem->escapeField($MultiGroupedItem->Behaviors->Sequence->settings['MultiGroupedItem']['group_fields'][0]) => null,
+        $MultiGroupedItem->escapeField($MultiGroupedItem->Behaviors->Sequence->settings['MultiGroupedItem']['group_fields'][0]) => null
       ),
       array(
-        $MultiGroupedItem->escapeField($MultiGroupedItem->Behaviors->Sequence->settings['MultiGroupedItem']['group_fields'][1]) => null,
+        $MultiGroupedItem->escapeField($MultiGroupedItem->Behaviors->Sequence->settings['MultiGroupedItem']['group_fields'][1]) => null
       )
     );
     $this->assertEqual($MultiGroupedItem->conditionsForGroups(), $expected);
@@ -368,10 +368,10 @@ class SequenceBehaviorTestCase extends CakeTestCase {
     $MultiGroupedItem->setOldGroups();
     $expected = array(
       array(
-        $MultiGroupedItem->escapeField($MultiGroupedItem->Behaviors->Sequence->settings['MultiGroupedItem']['group_fields'][0]) => 1,
+        $MultiGroupedItem->escapeField($MultiGroupedItem->Behaviors->Sequence->settings['MultiGroupedItem']['group_fields'][0]) => 1
       ),
       array(
-        $MultiGroupedItem->escapeField($MultiGroupedItem->Behaviors->Sequence->settings['MultiGroupedItem']['group_fields'][1]) => 1,
+        $MultiGroupedItem->escapeField($MultiGroupedItem->Behaviors->Sequence->settings['MultiGroupedItem']['group_fields'][1]) => 1
       )
     );
     $this->assertEqual($MultiGroupedItem->conditionsForGroups(), $expected);
@@ -403,8 +403,8 @@ class SequenceBehaviorTestCase extends CakeTestCase {
         $Item->order => $Item->order . ' - 1'
       ),
       'conditions' => array(
-        $Item->order . ' >' => 0,
-      ),
+        $Item->order . ' >' => 0
+      )
     );
     $Item->setDeleteUpdateData();
     $this->assertEqual($Item->Behaviors->Sequence->update, $expected);
@@ -416,8 +416,8 @@ class SequenceBehaviorTestCase extends CakeTestCase {
         $GroupedItem->order => $GroupedItem->order . ' - 1'
       ),
       'conditions' => array(
-        $GroupedItem->order . ' >' => 0,
-      ),
+        $GroupedItem->order . ' >' => 0
+      )
     );
     $GroupedItem->setDeleteUpdateData();
     $this->assertEqual($GroupedItem->Behaviors->Sequence->update, $expected);
@@ -429,8 +429,8 @@ class SequenceBehaviorTestCase extends CakeTestCase {
         $MultiGroupedItem->order => $MultiGroupedItem->order . ' - 1'
       ),
       'conditions' => array(
-        $MultiGroupedItem->order . ' >' => 0,
-      ),
+        $MultiGroupedItem->order . ' >' => 0
+      )
     );
     $MultiGroupedItem->setDeleteUpdateData();
     $this->assertEqual($MultiGroupedItem->Behaviors->Sequence->update, $expected);
@@ -440,9 +440,9 @@ class SequenceBehaviorTestCase extends CakeTestCase {
   function testUpdateAll() {
   }
 
-	function tearDown() {
-		ClassRegistry::flush();
-	}
+  function tearDown() {
+    ClassRegistry::flush();
+  }
 
 }
 ?>

@@ -135,7 +135,7 @@ class MultiGroupedItemFixture extends CakeTestFixture {
     array('id' => 122, 'name' => 'Group1 5 Group2 5 Item B', 'group_field_1' => 5, 'group_field_2' => 5, 'order' => 1),
     array('id' => 123, 'name' => 'Group1 5 Group2 5 Item C', 'group_field_1' => 5, 'group_field_2' => 5, 'order' => 2),
     array('id' => 124, 'name' => 'Group1 5 Group2 5 Item D', 'group_field_1' => 5, 'group_field_2' => 5, 'order' => 3),
-    array('id' => 125, 'name' => 'Group1 5 Group2 5 Item E', 'group_field_1' => 5, 'group_field_2' => 5, 'order' => 4),
+    array('id' => 125, 'name' => 'Group1 5 Group2 5 Item E', 'group_field_1' => 5, 'group_field_2' => 5, 'order' => 4)
   );
 }
 ?>

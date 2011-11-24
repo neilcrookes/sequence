@@ -24,7 +24,7 @@ class GroupedItemFixture extends CakeTestFixture {
     array('id' => 12, 'name' => 'Group 3 Item B', 'group_field' => 3, 'order' => 1),
     array('id' => 13, 'name' => 'Group 3 Item C', 'group_field' => 3, 'order' => 2),
     array('id' => 14, 'name' => 'Group 3 Item D', 'group_field' => 3, 'order' => 3),
-    array('id' => 15, 'name' => 'Group 3 Item E', 'group_field' => 3, 'order' => 4),
+    array('id' => 15, 'name' => 'Group 3 Item E', 'group_field' => 3, 'order' => 4)
   );
 }
 ?>
