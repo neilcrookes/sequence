@@ -1,0 +1,14 @@
+# Sequence Behavior Plugin for CakePHP 2.0
+
+This is a port of Neil Crookes' CakePHP Sequence behavior/plugin
+
+See http://www.neilcrookes.com/2009/02/09/cakephp-sequence-behavior/ for a description
+
+## Installing Sequence Behavior
+
+This is how I install it: 
+
+    $ cd myapp
+    $ git submodule add git://github.com/sduret/sequence.git app/Plugin/Sequence
+    $ git submodule init
+    $ git submodule update
