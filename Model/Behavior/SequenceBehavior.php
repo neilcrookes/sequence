@@ -227,7 +227,7 @@ class SequenceBehavior extends ModelBehavior {
 
       // No action if no new order or group specified
       if (!isset($this->_newOrder[$model->alias]) && !isset($this->_newGroups[$model->alias])) {
-        return;
+        return true;
       }
 
       $this->_setOldOrder($model);
@@ -235,8 +235,8 @@ class SequenceBehavior extends ModelBehavior {
 
       // No action if new and old group and order same
       if ($this->_newOrder[$model->alias] == $this->_oldOrder[$model->alias]
-        return;
       && $this->_newGroups[$model->alias] == $this->_oldGroups[$model->alias]) {
+        return true;
       }
 
       // If changing group
