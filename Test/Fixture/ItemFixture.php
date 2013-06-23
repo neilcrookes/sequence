@@ -13,7 +13,7 @@ class ItemFixture extends CakeTestFixture {
     array('id' => 2, 'name' => 'Item B', 'order' => 1),
     array('id' => 3, 'name' => 'Item C', 'order' => 2),
     array('id' => 4, 'name' => 'Item D', 'order' => 3),
-    array('id' => 5, 'name' => 'Item E', 'order' => 4),
+    array('id' => 5, 'name' => 'Item E', 'order' => 4)
   );
 }
 ?>
