@@ -4,6 +4,13 @@ class Item extends CakeTestModel {
 	public $name = 'Item';
 	public $actsAs = array('Sequence.Sequence' => 'order');
 	public $order = array('Item.order' => 'ASC');
+	/**
+	 *
+	 *
+	 * @return unknown
+	 */
+
+
 	public function findAll() {
 		return $this->find('all', array('order' => array('Item.order' => 'ASC')));
 	}
@@ -23,6 +30,9 @@ class SequenceBehaviorNoGroupTestCase extends CakeTestCase {
 
 	public $fixtures = array('plugin.sequence.item');
 
+	/**
+	 *
+	 */
 	public function testDeleteFirst() {
 		$Item = new Item();
 		$Item->delete(1);
@@ -36,6 +46,9 @@ class SequenceBehaviorNoGroupTestCase extends CakeTestCase {
 		$this->assertEqual($results, $expected);
 	}
 
+	/**
+	 *
+	 */
 	public function testDeleteMiddle() {
 		$Item = new Item();
 		$Item->delete(3);
@@ -49,6 +62,9 @@ class SequenceBehaviorNoGroupTestCase extends CakeTestCase {
 		$this->assertEqual($results, $expected);
 	}
 
+	/**
+	 *
+	 */
 	public function testDeleteEnd() {
 		$Item = new Item();
 		$Item->delete(5);
@@ -62,13 +78,16 @@ class SequenceBehaviorNoGroupTestCase extends CakeTestCase {
 		$this->assertEqual($results, $expected);
 	}
 
+	/**
+	 *
+	 */
 	public function testInsertOrderNotSpecified() {
 		$Item = new Item();
 		$Item->save(array(
-			'Item' => array(
-				'name' => 'Item F'
-			)
-		));
+				'Item' => array(
+					'name' => 'Item F'
+				)
+			));
 		$results = $Item->findAll();
 		$expected = array(
 			array('Item' => array('id' => 1, 'name' => 'Item A', 'order' => 0)),
@@ -81,14 +100,17 @@ class SequenceBehaviorNoGroupTestCase extends CakeTestCase {
 		$this->assertEqual($results, $expected);
 	}
 
+	/**
+	 *
+	 */
 	public function testInsertOrderSpecifiedFirst() {
 		$Item = new Item();
 		$Item->save(array(
-			'Item' => array(
-				'name' => 'Item F',
-				'order' => '0'
-			)
-		));
+				'Item' => array(
+					'name' => 'Item F',
+					'order' => '0'
+				)
+			));
 		$results = $Item->findAll();
 		$expected = array(
 			array('Item' => array('id' => '6', 'name' => 'Item F', 'order' => '0')),
@@ -101,14 +123,17 @@ class SequenceBehaviorNoGroupTestCase extends CakeTestCase {
 		$this->assertEqual($results, $expected);
 	}
 
+	/**
+	 *
+	 */
 	public function testInsertOrderSpecifiedMiddle() {
 		$Item = new Item();
 		$Item->save(array(
-			'Item' => array(
-				'name' => 'Item F',
-				'order' => '2'
-			)
-		));
+				'Item' => array(
+					'name' => 'Item F',
+					'order' => '2'
+				)
+			));
 		$results = $Item->findAll();
 		$expected = array(
 			array('Item' => array('id' => 1, 'name' => 'Item A', 'order' => 0)),
@@ -121,14 +146,17 @@ class SequenceBehaviorNoGroupTestCase extends CakeTestCase {
 		$this->assertEqual($results, $expected);
 	}
 
+	/**
+	 *
+	 */
 	public function testInsertOrderSpecifiedEnd() {
 		$Item = new Item();
 		$Item->save(array(
-			'Item' => array(
-				'name' => 'Item F',
-				'order' => '5'
-			)
-		));
+				'Item' => array(
+					'name' => 'Item F',
+					'order' => '5'
+				)
+			));
 		$results = $Item->findAll();
 		$expected = array(
 			array('Item' => array('id' => 1, 'name' => 'Item A', 'order' => 0)),
@@ -141,14 +169,17 @@ class SequenceBehaviorNoGroupTestCase extends CakeTestCase {
 		$this->assertEqual($results, $expected);
 	}
 
+	/**
+	 *
+	 */
 	public function testEditOrderNotSpecified() {
 		$Item = new Item();
 		$Item->save(array(
-			'Item' => array(
-				'id' => '1',
-				'name' => 'Item A - edit',
-			)
-		));
+				'Item' => array(
+					'id' => '1',
+					'name' => 'Item A - edit',
+				)
+			));
 		$results = $Item->findAll();
 		$expected = array(
 			array('Item' => array('id' => 1, 'name' => 'Item A - edit', 'order' => 0)),
@@ -160,14 +191,17 @@ class SequenceBehaviorNoGroupTestCase extends CakeTestCase {
 		$this->assertEqual($results, $expected);
 	}
 
+	/**
+	 *
+	 */
 	public function testEditMoveFirstDownMiddle() {
 		$Item = new Item();
 		$Item->save(array(
-			'Item' => array(
-				'id' => '1',
-				'order' => '3',
-			)
-		));
+				'Item' => array(
+					'id' => '1',
+					'order' => '3',
+				)
+			));
 		$results = $Item->findAll();
 		$expected = array(
 			array('Item' => array('id' => 2, 'name' => 'Item B', 'order' => 0)),
@@ -179,14 +213,17 @@ class SequenceBehaviorNoGroupTestCase extends CakeTestCase {
 		$this->assertEqual($results, $expected);
 	}
 
+	/**
+	 *
+	 */
 	public function testEditMoveFirstDownEnd() {
 		$Item = new Item();
 		$Item->save(array(
-			'Item' => array(
-				'id' => '1',
-				'order' => '4',
-			)
-		));
+				'Item' => array(
+					'id' => '1',
+					'order' => '4',
+				)
+			));
 		$results = $Item->findAll();
 		$expected = array(
 			array('Item' => array('id' => 2, 'name' => 'Item B', 'order' => 0)),
@@ -198,14 +235,17 @@ class SequenceBehaviorNoGroupTestCase extends CakeTestCase {
 		$this->assertEqual($results, $expected);
 	}
 
+	/**
+	 *
+	 */
 	public function testEditMoveMiddleDown() {
 		$Item = new Item();
 		$Item->save(array(
-			'Item' => array(
-				'id' => '3',
-				'order' => '4',
-			)
-		));
+				'Item' => array(
+					'id' => '3',
+					'order' => '4',
+				)
+			));
 		$results = $Item->findAll();
 		$expected = array(
 			array('Item' => array('id' => 1, 'name' => 'Item A', 'order' => 0)),
@@ -217,14 +257,17 @@ class SequenceBehaviorNoGroupTestCase extends CakeTestCase {
 		$this->assertEqual($results, $expected);
 	}
 
+	/**
+	 *
+	 */
 	public function testEditMoveMiddleUp() {
 		$Item = new Item();
 		$Item->save(array(
-			'Item' => array(
-				'id' => '3',
-				'order' => '1',
-			)
-		));
+				'Item' => array(
+					'id' => '3',
+					'order' => '1',
+				)
+			));
 		$results = $Item->findAll();
 		$expected = array(
 			array('Item' => array('id' => 1, 'name' => 'Item A', 'order' => 0)),
@@ -236,14 +279,17 @@ class SequenceBehaviorNoGroupTestCase extends CakeTestCase {
 		$this->assertEqual($results, $expected);
 	}
 
+	/**
+	 *
+	 */
 	public function testEditMoveEndDown() {
 		$Item = new Item();
 		$Item->save(array(
-			'Item' => array(
-				'id' => '5',
-				'order' => '4',
-			)
-		));
+				'Item' => array(
+					'id' => '5',
+					'order' => '4',
+				)
+			));
 		$results = $Item->findAll();
 		$expected = array(
 			array('Item' => array('id' => 1, 'name' => 'Item A', 'order' => 0)),
@@ -255,14 +301,17 @@ class SequenceBehaviorNoGroupTestCase extends CakeTestCase {
 		$this->assertEqual($results, $expected);
 	}
 
+	/**
+	 *
+	 */
 	public function testEditMoveEndUpMiddle() {
 		$Item = new Item();
 		$Item->save(array(
-			'Item' => array(
-				'id' => '5',
-				'order' => '2',
-			)
-		));
+				'Item' => array(
+					'id' => '5',
+					'order' => '2',
+				)
+			));
 		$results = $Item->findAll();
 		$expected = array(
 			array('Item' => array('id' => 1, 'name' => 'Item A', 'order' => 0)),
@@ -274,14 +323,17 @@ class SequenceBehaviorNoGroupTestCase extends CakeTestCase {
 		$this->assertEqual($results, $expected);
 	}
 
+	/**
+	 *
+	 */
 	public function testEditMoveEndUpFirst() {
 		$Item = new Item();
 		$Item->save(array(
-			'Item' => array(
-				'id' => '5',
-				'order' => '0',
-			)
-		));
+				'Item' => array(
+					'id' => '5',
+					'order' => '0',
+				)
+			));
 		$results = $Item->findAll();
 		$expected = array(
 			array('Item' => array('id' => 5, 'name' => 'Item E', 'order' => 0)),
@@ -298,10 +350,13 @@ class SequenceBehaviorSingleGroupTestCase extends CakeTestCase {
 
 	public $fixtures = array('plugin.sequence.grouped_item');
 
+	/**
+	 *
+	 */
 	public function testDelete() {
 		$GroupedItem = new GroupedItem();
 		$GroupedItem->delete(1);
-		$results = $GroupedItem->find('all', array('conditions' => array('group_field' => array(1,2)), 'order' => '`GroupedItem`.`group_field`, `GroupedItem`.`order`'));
+		$results = $GroupedItem->find('all', array('conditions' => array('group_field' => array(1, 2)), 'order' => '`GroupedItem`.`group_field`, `GroupedItem`.`order`'));
 		$expected = array(
 			array('GroupedItem' => array('id' => 2, 'name' => 'Group 1 Item B', 'group_field' => 1, 'order' => 0)),
 			array('GroupedItem' => array('id' => 3, 'name' => 'Group 1 Item C', 'group_field' => 1, 'order' => 1)),
@@ -316,15 +371,18 @@ class SequenceBehaviorSingleGroupTestCase extends CakeTestCase {
 		$this->assertEqual($results, $expected);
 	}
 
+	/**
+	 *
+	 */
 	public function testInsertWithGroupOrderSpecified() {
 		$GroupedItem = new GroupedItem();
 		$GroupedItem->save(array(
-			'GroupedItem' => array(
-				'name' => 'Group 1 Item F',
-				'group_field' => '1',
-				'order' => '3',
-			)
-		));
+				'GroupedItem' => array(
+					'name' => 'Group 1 Item F',
+					'group_field' => '1',
+					'order' => '3',
+				)
+			));
 		$results = $GroupedItem->find('all', array('conditions' => array('group_field' => '1')));
 		$expected = array(
 			array('GroupedItem' => array('id' => 1, 'name' => 'Group 1 Item A', 'group_field' => 1, 'order' => 0)),
@@ -337,14 +395,17 @@ class SequenceBehaviorSingleGroupTestCase extends CakeTestCase {
 		$this->assertEqual($results, $expected);
 	}
 
+	/**
+	 *
+	 */
 	public function testInsertWithGroupOrderNotSpecified() {
 		$GroupedItem = new GroupedItem();
 		$GroupedItem->save(array(
-			'GroupedItem' => array(
-				'name' => 'Group 1 Item F',
-				'group_field' => '1',
-			)
-		));
+				'GroupedItem' => array(
+					'name' => 'Group 1 Item F',
+					'group_field' => '1',
+				)
+			));
 		$results = $GroupedItem->find('all', array('conditions' => array('group_field' => '1')));
 		$expected = array(
 			array('GroupedItem' => array('id' => 1, 'name' => 'Group 1 Item A', 'group_field' => 1, 'order' => 0)),
@@ -357,13 +418,16 @@ class SequenceBehaviorSingleGroupTestCase extends CakeTestCase {
 		$this->assertEqual($results, $expected);
 	}
 
+	/**
+	 *
+	 */
 	public function testInsertNoGroup() {
 		$GroupedItem = new GroupedItem();
 		$GroupedItem->save(array(
-			'GroupedItem' => array(
-				'name' => 'Group Null Item A',
-			)
-		));
+				'GroupedItem' => array(
+					'name' => 'Group Null Item A',
+				)
+			));
 		$results = $GroupedItem->find('all', array('conditions' => array('group_field' => '1')));
 		$expected = array(
 			array('GroupedItem' => array('id' => 1, 'name' => 'Group 1 Item A', 'group_field' => 1, 'order' => 0)),
@@ -380,15 +444,18 @@ class SequenceBehaviorSingleGroupTestCase extends CakeTestCase {
 		$this->assertEqual($results, $expected);
 	}
 
+	/**
+	 *
+	 */
 	public function testEditGroupOrderNotSpecified() {
 		$GroupedItem = new GroupedItem();
 		$GroupedItem->save(array(
-			'GroupedItem' => array(
-				'id' => '3',
-				'group_field' => '2',
-			)
-		));
-		$results = $GroupedItem->find('all', array('conditions' => array('group_field' => array(1,2)), 'order' => '`GroupedItem`.`group_field`, `GroupedItem`.`order`'));
+				'GroupedItem' => array(
+					'id' => '3',
+					'group_field' => '2',
+				)
+			));
+		$results = $GroupedItem->find('all', array('conditions' => array('group_field' => array(1, 2)), 'order' => '`GroupedItem`.`group_field`, `GroupedItem`.`order`'));
 		$expected = array(
 			array('GroupedItem' => array('id' => 1, 'name' => 'Group 1 Item A', 'group_field' => 1, 'order' => 0)),
 			array('GroupedItem' => array('id' => 2, 'name' => 'Group 1 Item B', 'group_field' => 1, 'order' => 1)),
@@ -404,16 +471,19 @@ class SequenceBehaviorSingleGroupTestCase extends CakeTestCase {
 		$this->assertEqual($results, $expected);
 	}
 
+	/**
+	 *
+	 */
 	public function testEditGroupOrderSpecified() {
 		$GroupedItem = new GroupedItem();
 		$GroupedItem->save(array(
-			'GroupedItem' => array(
-				'id' => '3',
-				'group_field' => '2',
-				'order' => '2',
-			)
-		));
-		$results = $GroupedItem->find('all', array('conditions' => array('group_field' => array(1,2)), 'order' => '`GroupedItem`.`group_field`, `GroupedItem`.`order`'));
+				'GroupedItem' => array(
+					'id' => '3',
+					'group_field' => '2',
+					'order' => '2',
+				)
+			));
+		$results = $GroupedItem->find('all', array('conditions' => array('group_field' => array(1, 2)), 'order' => '`GroupedItem`.`group_field`, `GroupedItem`.`order`'));
 		$expected = array(
 			array('GroupedItem' => array('id' => 1, 'name' => 'Group 1 Item A', 'group_field' => 1, 'order' => 0)),
 			array('GroupedItem' => array('id' => 2, 'name' => 'Group 1 Item B', 'group_field' => 1, 'order' => 1)),
@@ -434,10 +504,13 @@ class SequenceBehaviorMultiGroupTestCase extends CakeTestCase {
 
 	public $fixtures = array('plugin.sequence.multi_grouped_item');
 
+	/**
+	 *
+	 */
 	public function testDelete() {
 		$MultiGroupedItem = new MultiGroupedItem();
 		$MultiGroupedItem->delete(1);
-		$results = $MultiGroupedItem->find('all', array('conditions' => array('group_field_1' => 1, 'group_field_2' => array(1,2)), 'order' => '`MultiGroupedItem`.`group_field_1`, `MultiGroupedItem`.`group_field_2`, `MultiGroupedItem`.`order`'));
+		$results = $MultiGroupedItem->find('all', array('conditions' => array('group_field_1' => 1, 'group_field_2' => array(1, 2)), 'order' => '`MultiGroupedItem`.`group_field_1`, `MultiGroupedItem`.`group_field_2`, `MultiGroupedItem`.`order`'));
 		$expected = array(
 			array('MultiGroupedItem' => array('id' => 2, 'name' => 'Group1 1 Group2 1 Item B', 'group_field_1' => 1, 'group_field_2' => 1, 'order' => 0)),
 			array('MultiGroupedItem' => array('id' => 3, 'name' => 'Group1 1 Group2 1 Item C', 'group_field_1' => 1, 'group_field_2' => 1, 'order' => 1)),
@@ -452,16 +525,19 @@ class SequenceBehaviorMultiGroupTestCase extends CakeTestCase {
 		$this->assertEqual($results, $expected);
 	}
 
+	/**
+	 *
+	 */
 	public function testInsertWithGroupOrderSpecified() {
 		$MultiGroupedItem = new MultiGroupedItem();
 		$MultiGroupedItem->save(array(
-			'MultiGroupedItem' => array(
-				'name' => 'Group1 1 Group2 1 Item F',
-				'group_field_1' => '1',
-				'group_field_2' => '1',
-				'order' => '3',
-			)
-		));
+				'MultiGroupedItem' => array(
+					'name' => 'Group1 1 Group2 1 Item F',
+					'group_field_1' => '1',
+					'group_field_2' => '1',
+					'order' => '3',
+				)
+			));
 		$results = $MultiGroupedItem->find('all', array('conditions' => array('group_field_1' => 1, 'group_field_2' => 1)));
 		$expected = array(
 			array('MultiGroupedItem' => array('id' => 1, 'name' => 'Group1 1 Group2 1 Item A', 'group_field_1' => 1, 'group_field_2' => 1, 'order' => 0)),
@@ -474,15 +550,18 @@ class SequenceBehaviorMultiGroupTestCase extends CakeTestCase {
 		$this->assertEqual($results, $expected);
 	}
 
+	/**
+	 *
+	 */
 	public function testInsertWithGroupOrderNotSpecified() {
 		$MultiGroupedItem = new MultiGroupedItem();
 		$MultiGroupedItem->save(array(
-			'MultiGroupedItem' => array(
-				'name' => 'Group1 1 Group2 1 Item F',
-				'group_field_1' => '1',
-				'group_field_2' => '1',
-			)
-		));
+				'MultiGroupedItem' => array(
+					'name' => 'Group1 1 Group2 1 Item F',
+					'group_field_1' => '1',
+					'group_field_2' => '1',
+				)
+			));
 		$results = $MultiGroupedItem->find('all', array('conditions' => array('group_field_1' => 1, 'group_field_2' => 1)));
 		$expected = array(
 			array('MultiGroupedItem' => array('id' => 1, 'name' => 'Group1 1 Group2 1 Item A', 'group_field_1' => 1, 'group_field_2' => 1, 'order' => 0)),
@@ -495,14 +574,17 @@ class SequenceBehaviorMultiGroupTestCase extends CakeTestCase {
 		$this->assertEqual($results, $expected);
 	}
 
+	/**
+	 *
+	 */
 	public function testInsertOneGroup() {
 		$MultiGroupedItem = new MultiGroupedItem();
 		$MultiGroupedItem->save(array(
-			'MultiGroupedItem' => array(
-				'name' => 'Group1 1 Group2 Null Item A',
-				'group_field_1' => '1',
-			)
-		));
+				'MultiGroupedItem' => array(
+					'name' => 'Group1 1 Group2 Null Item A',
+					'group_field_1' => '1',
+				)
+			));
 		$results = $MultiGroupedItem->find('count', array('conditions' => array('group_field_1' => 1)));
 		$expected = 26;
 		$this->assertEqual($results, $expected);
@@ -513,30 +595,33 @@ class SequenceBehaviorMultiGroupTestCase extends CakeTestCase {
 		$this->assertEqual($results, $expected);
 	}
 
+	/**
+	 *
+	 */
 	public function testEditGroupOrderNotSpecified() {
 		$MultiGroupedItem = new MultiGroupedItem();
 		$MultiGroupedItem->save(array(
-			'MultiGroupedItem' => array(
-				'id' => '3',
-				'group_field_1' => '2',
-				'group_field_2' => '2',
-			)
-		));
-		$results = $MultiGroupedItem->find('all', array(
-			'conditions' => array(
-				'OR' => array(
-					array(
-						'group_field_1' => 1,
-						'group_field_2' => 1
-					),
-					array(
-						'group_field_1' => 2,
-						'group_field_2' => 2
-					)
+				'MultiGroupedItem' => array(
+					'id' => '3',
+					'group_field_1' => '2',
+					'group_field_2' => '2',
 				)
-			),
-			'order' => '`MultiGroupedItem`.`group_field_1`, `MultiGroupedItem`.`group_field_2`, `MultiGroupedItem`.`order`'
-		));
+			));
+		$results = $MultiGroupedItem->find('all', array(
+				'conditions' => array(
+					'OR' => array(
+						array(
+							'group_field_1' => 1,
+							'group_field_2' => 1
+						),
+						array(
+							'group_field_1' => 2,
+							'group_field_2' => 2
+						)
+					)
+				),
+				'order' => '`MultiGroupedItem`.`group_field_1`, `MultiGroupedItem`.`group_field_2`, `MultiGroupedItem`.`order`'
+			));
 		$expected = array(
 			array('MultiGroupedItem' => array('id' => 1, 'name' => 'Group1 1 Group2 1 Item A', 'group_field_1' => 1, 'group_field_2' => 1, 'order' => 0)),
 			array('MultiGroupedItem' => array('id' => 2, 'name' => 'Group1 1 Group2 1 Item B', 'group_field_1' => 1, 'group_field_2' => 1, 'order' => 1)),

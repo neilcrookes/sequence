@@ -16,4 +16,3 @@ class ItemFixture extends CakeTestFixture {
 		array('id' => 5, 'name' => 'Item E', 'order' => 4)
 	);
 }
-
