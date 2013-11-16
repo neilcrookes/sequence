@@ -46,7 +46,7 @@
  * @copyright (c) 2010 Neil Crookes
  * @license MIT License - http://www.opensource.org/licenses/mit-license.php
  * @link http://www.neilcrookes.com
- * 
+ *
  * @package cake
  * @subpackage cake.base
  */
@@ -110,7 +110,7 @@ class SequenceBehavior extends ModelBehavior {
    * the behavior's defaults and stores the resultant array in this->settings
    * for the current model.
    *
-   * @param Model $model Model object that method is triggered on
+   * @param Model $Model Model object that method is triggered on
    * @param array $config Configuration options include:
    * - order_field - The database field name that stores the sequence number.
    *   Default is order.
@@ -121,86 +121,77 @@ class SequenceBehavior extends ModelBehavior {
    *   Default is 0
    * @return void
    */
-  public function setup(&$model, $config = array()) {
-
+  public function setup(Model $Model, $config = array()) {
     // If config is a string, assume it's the order field
     if (is_string($config)) {
       $config = array('order_field' => $config);
     }
-
     // Merge defaults with passed config and put in settings for model
-    $this->settings[$model->alias] = array_merge($this->_defaults, $config);
-
+    $this->settings[$Model->alias] = array_merge($this->_defaults, $config);
     // Set the escaped order field setting
-    $this->settings[$model->alias]['escaped_order_field'] = $model->escapeField($this->settings[$model->alias]['order_field']);
-
+    $this->settings[$Model->alias]['escaped_order_field'] = $Model->escapeField($this->settings[$Model->alias]['order_field']);
     // If group_fields in settings is false, return now as remainder not needed
-    if ($this->settings[$model->alias]['group_fields'] === false) {
+    if ($this->settings[$Model->alias]['group_fields'] === false) {
       return;
     }
-
     // If group_fields in settings is a string, make it an array
-    if (is_string($this->settings[$model->alias]['group_fields'])) {
-      $this->settings[$model->alias]['group_fields'] = array($this->settings[$model->alias]['group_fields']);
+    if (is_string($this->settings[$Model->alias]['group_fields'])) {
+      $this->settings[$Model->alias]['group_fields'] = array($this->settings[$Model->alias]['group_fields']);
     }
-
     // Set the group fields as the keys so we can add the escaped version as the
     // values
-    $this->settings[$model->alias]['group_fields'] = array_flip($this->settings[$model->alias]['group_fields']);
-    foreach ($this->settings[$model->alias]['group_fields'] as $groupField => $null) {
-      $this->settings[$model->alias]['group_fields'][$groupField] = $model->escapeField($groupField);
+    $this->settings[$Model->alias]['group_fields'] = array_flip($this->settings[$Model->alias]['group_fields']);
+    foreach ($this->settings[$Model->alias]['group_fields'] as $groupField => $null) {
+      $this->settings[$Model->alias]['group_fields'][$groupField] = $Model->escapeField($groupField);
     }
 
   }
 
   /**
    * Adds order value if not already set in query data
-   * 
-   * @param Model $model Model object that method is triggered on
+   *
+   * @param Model $Model Model object that method is triggered on
    * @param array $queryData Original queryData
    * @return array Modified queryData
    */
-  public function beforeFind(&$model, $queryData) {
+  public function beforeFind(Model $Model, $queryData) {
 
     // order can can sometimes be not set, or empty, or array(0 => null)
-    if (!isset($queryData['order'])
-    || empty($queryData['order'])
-    || (is_array($queryData['order'])
-      && count($queryData['order']) == 1
-      && empty($queryData['order'][0]))) {
-      $queryData['order'] = $this->settings[$model->alias]['escaped_order_field'];
+    if (!isset($queryData['order']) || empty($queryData['order']) || (
+        is_array($queryData['order'])
+        && count($queryData['order']) == 1
+        && empty($queryData['order'][0])
+      )) {
+      $queryData['order'] = $this->settings[$Model->alias]['escaped_order_field'];
     }
-
     return $queryData;
-    
   }
 
   /**
    * Sets update actions and their conditions which get executed in after save,
    * affects model->data when necessary
    *
-   * @param Model $model Model object that method is triggered on
+   * @param Model $Model Model object that method is triggered on
+   * @param array $options
    * @return boolean Always true otherwise model will not save
    */
-  public function beforeSave(&$model) {
-
-    $this->_update[$model->alias] = array();
-
+  public function beforeSave(Model $Model, $options = array()) {
+    $this->_update[$Model->alias] = array();
     // Sets new order and new groups from model->data
-    $this->_setNewOrder($model);
-    $this->_setNewGroups($model);
+    $this->_setNewOrder($Model);
+    $this->_setNewGroups($Model);
 
-    $orderField = $this->settings[$model->alias]['order_field'];
-    $escapedOrderField = $this->settings[$model->alias]['escaped_order_field'];
+    $orderField = $this->settings[$Model->alias]['order_field'];
+    $escapedOrderField = $this->settings[$Model->alias]['escaped_order_field'];
 
     // Adding
-    if (!$model->id) {
+    if (!$Model->id) {
 
       // Order not specified
-      if (!isset($this->_newOrder[$model->alias])) {
+      if (!isset($this->_newOrder[$Model->alias])) {
 
         // Insert at end of list
-        $model->data[$model->alias][$orderField] = $this->_getHighestOrder($model, $this->_newGroups[$model->alias]) + 1;
+        $Model->data[$Model->alias][$orderField] = $this->_getHighestOrder($Model, $this->_newGroups[$Model->alias]) + 1;
 
       // Order specified
       } else {
@@ -208,15 +199,15 @@ class SequenceBehavior extends ModelBehavior {
         // The updateAll called in afterSave uses old groups values as default
         // conditions to restrict which records are updated, so set old groups
         // to new groups as old isn't set.
-        $this->_oldGroups[$model->alias] = $this->_newGroups[$model->alias];
+        $this->_oldGroups[$Model->alias] = $this->_newGroups[$Model->alias];
 
         // Insert and increment order of records it's inserted before
-        $this->_update[$model->alias][] = array(
+        $this->_update[$Model->alias][] = array(
           'action' => array(
             $escapedOrderField => $escapedOrderField . ' + 1'
           ),
           'conditions' => array(
-            $escapedOrderField . ' >=' => $this->_newOrder[$model->alias]
+            $escapedOrderField . ' >=' => $this->_newOrder[$Model->alias]
           ),
         );
 
@@ -226,50 +217,50 @@ class SequenceBehavior extends ModelBehavior {
     } else {
 
       // No action if no new order or group specified
-      if (!isset($this->_newOrder[$model->alias]) && !isset($this->_newGroups[$model->alias])) {
+      if (!isset($this->_newOrder[$Model->alias]) && !isset($this->_newGroups[$Model->alias])) {
         return true;
       }
 
-      $this->_setOldOrder($model);
-      $this->_setOldGroups($model);
+      $this->_setOldOrder($Model);
+      $this->_setOldGroups($Model);
 
       // No action if new and old group and order same
-      if ($this->_newOrder[$model->alias] == $this->_oldOrder[$model->alias]
-      && Set::isEqual($this->_newGroups[$model->alias], $this->_oldGroups[$model->alias])) {
+      if ($this->_newOrder[$Model->alias] == $this->_oldOrder[$Model->alias]
+      && serialize($this->_newGroups[$Model->alias]) == serialize($this->_oldGroups[$Model->alias])) {
         return true;
       }
 
       // If changing group
-      if ($this->_newGroups[$model->alias] && $this->_newGroups[$model->alias] != $this->_oldGroups[$model->alias]) {
+      if ($this->_newGroups[$Model->alias] && $this->_newGroups[$Model->alias] != $this->_oldGroups[$Model->alias]) {
 
         // Decrement records in old group with higher order than moved record old order
-        $this->_update[$model->alias][] = array(
+        $this->_update[$Model->alias][] = array(
           'action' => array(
             $escapedOrderField => $escapedOrderField . ' - 1'
           ),
           'conditions' => array(
-            $escapedOrderField . ' >=' => $this->_oldOrder[$model->alias],
+            $escapedOrderField . ' >=' => $this->_oldOrder[$Model->alias],
           ),
         );
 
         // Order not specified
-        if (!isset($this->_newOrder[$model->alias])) {
+        if (!isset($this->_newOrder[$Model->alias])) {
 
           // Insert at end of new group
-          $model->data[$model->alias][$orderField] = $this->_getHighestOrder($model, $this->_newGroups[$model->alias]) + 1;
+          $Model->data[$Model->alias][$orderField] = $this->_getHighestOrder($Model, $this->_newGroups[$Model->alias]) + 1;
 
         // Order specified
         } else {
 
           // Increment records in new group with higher order than moved record new order
-          $this->_update[$model->alias][] = array(
+          $this->_update[$Model->alias][] = array(
             'action' => array(
               $escapedOrderField => $escapedOrderField . ' + 1'
             ),
             'conditions' => array(
-              $escapedOrderField . ' >=' => $this->_newOrder[$model->alias],
+              $escapedOrderField . ' >=' => $this->_newOrder[$Model->alias],
             ),
-            'group_values' => $this->_newGroups[$model->alias],
+            'group_values' => $this->_newGroups[$Model->alias],
           );
         }
 
@@ -277,53 +268,47 @@ class SequenceBehavior extends ModelBehavior {
       } else {
 
         // If moving up
-        if ($this->_newOrder[$model->alias] < $this->_oldOrder[$model->alias]) {
+        if ($this->_newOrder[$Model->alias] < $this->_oldOrder[$Model->alias]) {
 
           // Increment order of those in between
-          $this->_update[$model->alias][] = array(
+          $this->_update[$Model->alias][] = array(
             'action' => array(
               $escapedOrderField => $escapedOrderField . ' + 1'
             ),
             'conditions' => array(
-              array($escapedOrderField . ' >=' => $this->_newOrder[$model->alias]),
-              array($escapedOrderField . ' <' => $this->_oldOrder[$model->alias]),
+              array($escapedOrderField . ' >=' => $this->_newOrder[$Model->alias]),
+              array($escapedOrderField . ' <' => $this->_oldOrder[$Model->alias]),
             ),
           );
 
         // Moving down
         } else {
-
           // Decrement order of those in between
-          $this->_update[$model->alias][] = array(
+          $this->_update[$Model->alias][] = array(
             'action' => array(
               $escapedOrderField => $escapedOrderField . ' - 1'
             ),
             'conditions' => array(
-              array($escapedOrderField . ' >' => $this->_oldOrder[$model->alias]),
-              array($escapedOrderField . ' <=' => $this->_newOrder[$model->alias]),
+              array($escapedOrderField . ' >' => $this->_oldOrder[$Model->alias]),
+              array($escapedOrderField . ' <=' => $this->_newOrder[$Model->alias]),
             ),
           );
-
         }
-
       }
-
     }
-
     return true;
-
   }
 
   /**
    * Called automatically after model gets saved, triggers order updates
    *
-   * @param Model $model Model object that method is triggered on
+   * @param Model $Model Model object that method is triggered on
    * @param boolean $created Whether the record was created or not
+   * @param array $options
    * @return boolean
    */
-  public function afterSave(&$model, $created) {
-
-    return $this->_updateAll($model);
+  public function afterSave(Model $Model, $created, $options = array()) {
+    return $this->_updateAll($Model);
 
   }
 
@@ -331,26 +316,27 @@ class SequenceBehavior extends ModelBehavior {
    * When you delete a record from a set, you need to decrement the order of all
    * records that were after it in the set.
    *
-   * @param Model $model Model object that method is triggered on
+   * @param Model $Model Model object that method is triggered on
+   * @param array $options
    * @return boolean Always true
    */
-  public function beforeDelete(&$model) {
+  public function beforeDelete(Model $Model, $options = array()) {
 
-    $this->_update[$model->alias] = array();
+    $this->_update[$Model->alias] = array();
 
     // Set current order and groups of record to be deleted
-    $this->_setOldOrder($model);
-    $this->_setOldGroups($model);
+    $this->_setOldOrder($Model);
+    $this->_setOldGroups($Model);
 
-    $escapedOrderField = $this->settings[$model->alias]['escaped_order_field'];
+    $escapedOrderField = $this->settings[$Model->alias]['escaped_order_field'];
 
     // Decrement records in group with higher order than deleted record
-    $this->_update[$model->alias][] = array(
+    $this->_update[$Model->alias][] = array(
       'action' => array(
         $escapedOrderField => $escapedOrderField . ' - 1'
       ),
       'conditions' => array(
-        $escapedOrderField . ' >' => $this->_oldOrder[$model->alias],
+        $escapedOrderField . ' >' => $this->_oldOrder[$Model->alias],
       ),
     );
 
@@ -361,12 +347,12 @@ class SequenceBehavior extends ModelBehavior {
   /**
    * Called automatically after model gets deleted, triggers order updates
    *
-   * @param Model $model Model object that method is triggered on
+   * @param Model $Model Model object that method is triggered on
    * @return boolean
    */
-  public function afterDelete(&$model) {
+  public function afterDelete(Model $Model) {
 
-    return $this->_updateAll($model);
+    return $this->_updateAll($Model);
 
   }
 
@@ -375,20 +361,20 @@ class SequenceBehavior extends ModelBehavior {
    * record is added to the set, it is added at the current highest order, plus
    * one.
    *
-   * @param Model $model Model object that method is triggered on
+   * @param Model $Model Model object that method is triggered on
    * @param array $groupValues Array with group field => group values, used for conditions
    * @return integer Value of order field of last record in set
    */
-  protected function _getHighestOrder(&$model, $groupValues = false) {
+  protected function _getHighestOrder(Model $Model, $groupValues = false) {
 
-    $orderField = $this->settings[$model->alias]['order_field'];
-    $escapedOrderField = $this->settings[$model->alias]['escaped_order_field'];
+    $orderField = $this->settings[$Model->alias]['order_field'];
+    $escapedOrderField = $this->settings[$Model->alias]['escaped_order_field'];
 
     // Conditions for the record set to which this record will be added to.
-    $conditions = $this->_conditionsForGroups($model, $groupValues);
+    $conditions = $this->_conditionsForGroups($Model, $groupValues);
 
     // Find the last record in the set
-    $last = $model->find('first', array(
+    $last = $Model->find('first', array(
       'conditions' => $conditions,
       'recursive' => -1,
       'order' => $escapedOrderField . ' DESC',
@@ -396,11 +382,11 @@ class SequenceBehavior extends ModelBehavior {
 
     // If there is a last record (i.e. any) in the set, return the it's order
     if ($last) {
-      return $last[$model->alias][$orderField];
+      return $last[$Model->alias][$orderField];
     }
 
     // If there isn't any records in the set, return the start number minus 1
-    return ((int)$this->settings[$model->alias]['start_at'] - 1);
+    return ((int)$this->settings[$Model->alias]['start_at'] - 1);
 
   }
 
@@ -408,17 +394,17 @@ class SequenceBehavior extends ModelBehavior {
    * If editing or deleting a record, set the oldOrder property to the current
    * order in the database.
    *
-   * @param Model $model Model object that method is triggered on
+   * @param Model $Model Model object that method is triggered on
    * @return void
    */
-  protected function _setOldOrder(&$model) {
+  protected function _setOldOrder(Model $Model) {
 
-    $this->_oldOrder[$model->alias] = null;
+    $this->_oldOrder[$Model->alias] = null;
 
-    $orderField = $this->settings[$model->alias]['order_field'];
+    $orderField = $this->settings[$Model->alias]['order_field'];
 
     // Set old order to record's current order in database
-    $this->_oldOrder[$model->alias] = $model->field($orderField);
+    $this->_oldOrder[$Model->alias] = $Model->field($orderField);
 
   }
 
@@ -426,14 +412,14 @@ class SequenceBehavior extends ModelBehavior {
    * If editing or deleting a record, set the oldGroups property to the current
    * group values in the database for each group field for this model.
    *
-   * @param Model $model Model object that method is triggered on
+   * @param Model $Model Model object that method is triggered on
    * @return void
    */
-  protected function _setOldGroups(&$model) {
+  protected function _setOldGroups(Model $Model) {
 
-    $this->_oldGroups[$model->alias] = null;
+    $this->_oldGroups[$Model->alias] = null;
 
-    $groupFields = $this->settings[$model->alias]['group_fields'];
+    $groupFields = $this->settings[$Model->alias]['group_fields'];
 
     // If this model does not have any groups, return
     if ($groupFields === false) {
@@ -443,7 +429,7 @@ class SequenceBehavior extends ModelBehavior {
     // Set oldGroups property with key of group field and current value of group
     // field from db
     foreach ($groupFields as $groupField => $escapedGroupField) {
-      $this->_oldGroups[$model->alias][$groupField] = $model->field($groupField);
+      $this->_oldGroups[$Model->alias][$groupField] = $Model->field($groupField);
     }
 
   }
@@ -451,35 +437,35 @@ class SequenceBehavior extends ModelBehavior {
   /**
    * Sets new order property for current model to value in model->data
    *
-   * @param Model $model Model object that method is triggered on
+   * @param Model $Model Model object that method is triggered on
    * @return void
    */
-  protected function _setNewOrder(&$model) {
+  protected function _setNewOrder(Model $Model) {
 
-    $this->_newOrder[$model->alias] = null;
+    $this->_newOrder[$Model->alias] = null;
 
-    $orderField = $this->settings[$model->alias]['order_field'];
+    $orderField = $this->settings[$Model->alias]['order_field'];
 
-    if (!isset($model->data[$model->alias][$orderField])) {
+    if (!isset($Model->data[$Model->alias][$orderField])) {
       return;
     }
 
-    $this->_newOrder[$model->alias] = $model->data[$model->alias][$orderField];
+    $this->_newOrder[$Model->alias] = $Model->data[$Model->alias][$orderField];
 
   }
 
   /**
    * Set new groups property with keys of group field and values from
-   * $model->data, if set.
+   * $Model->data, if set.
    *
-   * @param Model $model Model object that method is triggered on
+   * @param Model $Model Model object that method is triggered on
    * @return void
    */
-  protected function _setNewGroups(&$model) {
+  protected function _setNewGroups(Model $Model) {
 
-    $this->_newGroups[$model->alias] = null;
+    $this->_newGroups[$Model->alias] = null;
 
-    $groupFields = $this->settings[$model->alias]['group_fields'];
+    $groupFields = $this->settings[$Model->alias]['group_fields'];
 
     // Return if this model has not group fields
     if ($groupFields === false) {
@@ -488,9 +474,9 @@ class SequenceBehavior extends ModelBehavior {
 
     foreach ($groupFields as $groupField => $escapedGroupField) {
 
-      if (isset($model->data[$model->alias][$groupField])) {
+      if (isset($Model->data[$Model->alias][$groupField])) {
 
-        $this->_newGroups[$model->alias][$groupField] = $model->data[$model->alias][$groupField];
+        $this->_newGroups[$Model->alias][$groupField] = $Model->data[$Model->alias][$groupField];
 
       }
 
@@ -502,15 +488,15 @@ class SequenceBehavior extends ModelBehavior {
    * Returns array of conditions for restricting a record set according to the
    * model's group fields setting.
    *
-   * @param Model $model Model object that method is triggered on
+   * @param Model $Model Model object that method is triggered on
    * @param array $groupValues Array of group field => group value pairs
    * @return array Array of escaped group field => group value pairs
    */
-  protected function _conditionsForGroups(&$model, $groupValues = false) {
+  protected function _conditionsForGroups(Model $Model, $groupValues = false) {
 
     $conditions = array();
 
-    $groupFields = $this->settings[$model->alias]['group_fields'];
+    $groupFields = $this->settings[$Model->alias]['group_fields'];
 
     // Return if this model has not group fields
     if ($groupFields === false) {
@@ -520,7 +506,7 @@ class SequenceBehavior extends ModelBehavior {
     // By default, if group values are not specified, use the old group fields
     if ($groupValues === false) {
 
-      $groupValues = $this->_oldGroups[$model->alias];
+      $groupValues = $this->_oldGroups[$Model->alias];
 
     }
 
@@ -548,31 +534,31 @@ class SequenceBehavior extends ModelBehavior {
    * you've just modified, as the order will have been set already, so exclude
    * it with some conditions.
    *
-   * @param Model $model Model object that method is triggered on
+   * @param Model $Model Model object that method is triggered on
    * @return array Array Model.primary_key <> => $id
    */
-  protected function _conditionsNotCurrent(&$model) {
+  protected function _conditionsNotCurrent(Model $Model) {
 
-    return array($model->escapeField($model->primaryKey) . ' <>' => $model->id);
+    return array($Model->escapeField($Model->primaryKey) . ' <>' => $Model->id);
 
   }
 
   /**
    * Executes the update, if there are any. Called in afterSave and afterDelete.
    *
-   * @param Model $model Model object that method is triggered on
+   * @param Model $Model Model object that method is triggered on
    * @return boolean
    */
-  protected function _updateAll(&$model) {
+  protected function _updateAll(Model $Model) {
 
     // If there's no update to do
-    if (empty($this->_update[$model->alias])) {
+    if (empty($this->_update[$Model->alias])) {
       return true;
     }
 
     $return = true;
 
-    foreach ($this->_update[$model->alias] as $update) {
+    foreach ($this->_update[$Model->alias] as $update) {
 
       $groupValues = false;
 
@@ -585,12 +571,12 @@ class SequenceBehavior extends ModelBehavior {
       // just modified/inserted and conditions to make sure only records in the
       // current record's groups
       $conditions = array_merge(
-        $this->_conditionsForGroups($model, $groupValues),
-        $this->_conditionsNotCurrent($model),
+        $this->_conditionsForGroups($Model, $groupValues),
+        $this->_conditionsNotCurrent($Model),
         $update['conditions']
       );
 
-      $success = $model->updateAll($update['action'], $conditions);
+      $success = $Model->updateAll($update['action'], $conditions);
 
       $return = $return && $success;
 
